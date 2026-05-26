@@ -1,0 +1,19 @@
+{
+  "total_fp": 1049,
+  "total_fn": 2519,
+  "small_fp": 454,
+  "small_fn": 1842,
+  "medium_fn": 649,
+  "pct_small_fp": 43.3,
+  "pct_small_fn": 73.1,
+  "top_fp_classes": {
+    "pedestrian": 489,
+    "motor": 169,
+    "car": 166
+  },
+  "top_fn_classes": {
+    "people": 759,
+    "pedestrian": 759,
+    "motor": 571
+  }
+}
