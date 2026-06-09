@@ -1,0 +1,59 @@
+{
+  "accuracy": 0.6073,
+  "train_samples": 35045,
+  "val_samples": 4604,
+  "train_time_sec": 181.8,
+  "inference_time_sec": 0.018,
+  "per_class": {
+    "pedestrian": {
+      "precision": 0.64,
+      "recall": 0.87,
+      "f1": 0.74
+    },
+    "people": {
+      "precision": 0.58,
+      "recall": 0.37,
+      "f1": 0.45
+    },
+    "bicycle": {
+      "precision": 0.19,
+      "recall": 0.34,
+      "f1": 0.24
+    },
+    "car": {
+      "precision": 0.63,
+      "recall": 0.88,
+      "f1": 0.73
+    },
+    "van": {
+      "precision": 0.12,
+      "recall": 0.01,
+      "f1": 0.02
+    },
+    "truck": {
+      "precision": 0.15,
+      "recall": 0.07,
+      "f1": 0.09
+    },
+    "tricycle": {
+      "precision": 0.29,
+      "recall": 0.02,
+      "f1": 0.03
+    },
+    "awning-tricycle": {
+      "precision": 0.25,
+      "recall": 0.01,
+      "f1": 0.02
+    },
+    "bus": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "motor": {
+      "precision": 0.66,
+      "recall": 0.42,
+      "f1": 0.51
+    }
+  }
+}

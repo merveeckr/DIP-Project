@@ -1,0 +1,23 @@
+{
+  "SORT": {
+    "mota": 42.3,
+    "idf1": 47.8,
+    "id_switches": 312,
+    "fps": 28.5,
+    "description": "Kalman filtresi + IoU tabanl\u0131 basit e\u015fle\u015ftirme"
+  },
+  "DeepSORT": {
+    "mota": 51.2,
+    "idf1": 57.4,
+    "id_switches": 198,
+    "fps": 18.2,
+    "description": "SORT + g\u00f6r\u00fcn\u00fcm \u00f6zellikleri (Re-ID)"
+  },
+  "ByteTrack": {
+    "mota": 62.1,
+    "idf1": 67.8,
+    "id_switches": 89,
+    "fps": 35.6,
+    "description": "D\u00fc\u015f\u00fck g\u00fcvenli tespitleri de kullanan iki a\u015famal\u0131 e\u015fle\u015ftirme"
+  }
+}
