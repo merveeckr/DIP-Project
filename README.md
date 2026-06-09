@@ -188,17 +188,7 @@ Tüm aşamaları sırayla çalıştırmak için notebook'ları şu sırayla aç�
 
 ---
 
-### 8. Rapor Üretimi
 
-```bash
-# Tam IEEE makalesi
-python create_ieee_paper.py
-# Çıktı: IEEE_DIP_Paper_CakirBinay.docx
-
-# Sonuçlar bölümü (tüm tablolar + 14 figür gömülü)
-python create_results_word.py
-# Çıktı: IEEE_Results_Section.docx
-```
 ## Konfigürasyon Dosyaları
 
 | Dosya | İçerik |
@@ -274,9 +264,6 @@ Annotated Frame / Video          → Toplam: 24.5 ms = 40.8 FPS (SAHI kapalı)
 
 ---
 
-## Gereksinimler
-
-requirements.txt dosyasında gerekli gereksinimler mevcuttur.
 
 GPU: NVIDIA Tesla T4 (veya eşdeğeri, min. 4 GB VRAM)  
 Python: 3.10+  
