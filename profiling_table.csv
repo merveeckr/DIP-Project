@@ -1,6 +1,0 @@
-Component,Avg (ms),Std (ms),FPS,VRAM peak (MB)
-Preprocessing (resize 640),1.44,0.08,696.5,94.8
-YOLOv8 (no SAHI),13.13,1.79,76.1,151.6
-YOLOv8 + SAHI (640×640 20%),541.73,95.4,1.8,167.2
-ByteTrack only,9.47,0.83,105.6,129.3
-Full Pipeline (YOLO+Track),24.5,1.11,40.8,152.5
