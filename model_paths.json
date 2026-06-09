@@ -1,0 +1,6 @@
+{
+  "best_model": "/content/drive/MyDrive/DIP_Project (1)/runs/yolov8s_visdrone_v1/weights/best.pt",
+  "last_model": "/content/drive/MyDrive/DIP_Project (1)/runs/yolov8s_visdrone_v1/weights/last.pt",
+  "run_dir": "/content/drive/MyDrive/DIP_Project (1)/runs/yolov8s_visdrone_v1",
+  "yaml": "/content/drive/MyDrive/DIP_Project (1)/data.yaml"
+}

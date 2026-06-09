@@ -1,0 +1,16 @@
+names:
+- pedestrian
+- people
+- bicycle
+- car
+- van
+- truck
+- tricycle
+- awning-tricycle
+- bus
+- motor
+nc: 10
+path: /content/drive/MyDrive/DIP_Project/datasets/VisDrone
+test: images/test-dev
+train: images/train
+val: images/val
