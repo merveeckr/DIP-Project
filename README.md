@@ -33,7 +33,7 @@ Full end-to-end detection + tracking pipeline:
 - Pipeline profiling, error analysis, hyperparameter grid search
 - 9 Colab notebooks documenting day-by-day development
 
-### `feature/hog-svm-yolov8n-baseline` — Emine Binay
+### `feature/hog-svm-yolov8n-baseline` — Emine Binay (22290370)
 Classical ML and deep learning baselines:
 - HOG + SVM: 64×64 crops, 3780-dim feature vector, RBF kernel — 60.73% accuracy
 - YOLOv8n: lightweight baseline (3.0M params), 30 epochs — mAP@50=41.6%
@@ -78,3 +78,5 @@ pip install ultralytics sahi supervision scikit-learn python-docx
 ```
 
 GPU recommended (Tesla T4 or equivalent). Notebooks designed for Google Colab.
+
+Presentation Link : https://drive.google.com/drive/folders/1F-BoQjC2m1d3hm0D_OhK4VDlx8PS_cHd?usp=sharing
