@@ -25,7 +25,7 @@ This project benchmarks three approaches for detecting and tracking objects (ped
 
 This repository has two feature branches, one per team member:
 
-### `feature/yolov8s-sahi-bytetrack` — Merve Çakır (21290542)
+### `yolov8s-sahi-bytetrack` — Merve Çakır (21290542)
 Full end-to-end detection + tracking pipeline:
 - YOLOv8s trained 50 epochs on VisDrone (mAP@50 = 38.71%)
 - SAHI (Slicing Aided Hyper Inference) for small object detection — 640×640 slices, 20% overlap
@@ -33,7 +33,7 @@ Full end-to-end detection + tracking pipeline:
 - Pipeline profiling, error analysis, hyperparameter grid search
 - 9 Colab notebooks documenting day-by-day development
 
-### `feature/hog-svm-yolov8n-baseline` — Emine Binay (22290370)
+### `hog-svm-yolov8n-baseline` — Emine Binay (22290370)
 Classical ML and deep learning baselines:
 - HOG + SVM: 64×64 crops, 3780-dim feature vector, RBF kernel — 60.73% accuracy
 - YOLOv8n: lightweight baseline (3.0M params), 30 epochs — mAP@50=41.6%
