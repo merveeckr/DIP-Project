@@ -10,7 +10,7 @@ This notebook implements and evaluates the **Tier 1 (Classical ML)** and **Tier 
 The work covers the complete pipeline from dataset exploration and preprocessing through classical machine learning baseline, deep learning training, SAHI integration, and multi-tracker comparison — forming the experimental foundation for the comparative analysis in the joint project report.
 
 **Student:** Emine Binay | ID: 22290370  
-**Partner:** Merve Çakır | ID: 21290542 — [Partner's Repository](https://github.com/merveeckr/DIP-Project)  
+**Partner:** Merve Çakır | ID: 21290542   
 **Supervisor:** Asst. Prof. Dr. Feyza Toktaş  
 **Platform:** Kaggle Notebooks (Tesla T4 x2 GPU)
 
