@@ -63,14 +63,6 @@ Classical ML and deep learning baselines:
 
 ---
 
-## Paper
-
-A joint IEEE-format conference paper covering all three methods is available in the `feature/yolov8s-sahi-bytetrack` branch:
-- `IEEE_DIP_Paper_CakirBinay.docx` — full paper (Abstract through Conclusion + References)
-- `IEEE_Results_Section.docx` — Results section with all tables and embedded figures
-
----
-
 ## Requirements
 
 ```bash
