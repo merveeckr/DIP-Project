@@ -6,6 +6,7 @@ Veri kümesi: [VisDrone 2019](https://github.com/VisDrone/VisDrone-Dataset) — 
 
 ---
 
+
 ## Sonuçlar (Özet)
 
 | Metrik | Değer |
@@ -39,59 +40,165 @@ DIP_Project/
 
 ---
 
-## Notebook'lar (`notebooks/`)
+## Kurulum ve Çalıştırma
 
-Her notebook, projenin belirli bir aşamasını temsil eder. Google Colab'da Tesla T4 GPU ile çalıştırılmıştır.
+### 1. Gereksinimler
 
-| Dosya | Ne Yapar |
-|---|---|
-| `day1_setup.ipynb` | Ortam kurulumu — Ultralytics, SAHI, ByteTrack yükleme; VisDrone veri kümesini Google Drive'a bağlama ve `data.yaml` oluşturma |
-| `day2_sahi_test.ipynb` | SAHI'nin temel mantığını test etme — tek bir görüntü üzerinde dilim (slice) tabanlı çıkarım; slice sayısı ve overlap oranının etkisini gözlemleme |
-| `day5_training.ipynb` | YOLOv8s modelini VisDrone üzerinde 50 epoch eğitme (batch=16, imgsz=640, mosaic augmentation); eğitim eğrilerini kaydetme |
-| `day7_bytetrack.ipynb` | ByteTrack entegrasyonu — YOLOv8s tespitlerini ByteTrack ile birleştirip video üzerinde çok nesne takibi yapma; MOTA/IDF1/IDSw hesaplama |
-| `day8_bytetrack_hyperparams.ipynb` | ByteTrack hiperparametre grid search — 12 farklı konfigürasyon (track_thresh, buffer, match_thresh kombinasyonları) denenerek en iyi config belirleme |
-| `day11_evaluation.ipynb` | Model değerlendirme — VisDrone val seti üzerinde mAP@50, P, R, F1 hesaplama; per-class AP analizi; sonuçları JSON/CSV'ye kaydetme |
-| `day12_sahi_comparison.ipynb` | SAHI konfigürasyon karşılaştırması — 5 farklı slice boyutu ve overlap oranı denenerek en iyi SAHI ayarını bulma (640×640, %20 overlap) |
-| `day13_profiling.ipynb` | Performans profilleme — her pipeline bileşeninin (preprocessing, YOLO, SAHI, ByteTrack) ms ve FPS ölçümü; VRAM kullanımı; sonuçları JSON/CSV'ye kaydetme |
-| `day14_error_analysis.ipynb` | Hata analizi — FP (yanlış pozitif) ve FN (kaçırılan nesne) tespitleri görselleştirme; küçük nesne sorunu analizi (%73.1 FN küçük nesneler) |
+```bash
+pip install -r requirements.txt
+```
+
+> Google Colab kullanıyorsanız `torch` ve `torchvision` zaten kurulu gelir.  
+> GPU: NVIDIA Tesla T4 (veya eşdeğeri, min. 4 GB VRAM) | Python: 3.10+
 
 ---
 
-## Ana Python Scriptleri
+### 2. Veri Kümesi Hazırlığı
 
-### `track_video.py`
-**Ne yapar:** Bir video dosyası üzerinde tam pipeline'ı çalıştırır — YOLOv8s ile nesne tespiti + ByteTrack ile takip — ve sonucu annotated video olarak kaydeder.
+VisDrone 2019 veri kümesini indirip aşağıdaki yapıya yerleştirin:
 
-**Nasıl çalışır:**
-1. Video frame'lerini okur
-2. Her frame'e YOLOv8s inference uygular (conf ≥ 0.25)
-3. Tespitleri ByteTrack'e iletir (iki aşamalı Hungarian eşleştirme)
-4. Her nesneye kalıcı ID atar, bounding box + ID'yi frame üzerine çizer
-5. Çıktıyı `tracking_output/` klasörüne yazar
+```
+datasets/VisDrone/
+├── images/
+│   ├── train/     # 6,471 görüntü
+│   ├── val/       # 548 görüntü
+│   └── test-dev/
+└── labels/
+    ├── train/
+    └── val/
+```
 
-**Çalıştırma:**
-```bash
-python track_video.py --source 607004_Cities_City_3840x2160.mp4 --output tracking_output/cities_tracked.mp4
+`data.yaml` dosyasındaki `path` satırını kendi dizininize göre güncelleyin:
+
+```yaml
+path: /content/drive/MyDrive/DIP_Project/datasets/VisDrone  # Colab
+# path: ./datasets/VisDrone                                  # Yerel
 ```
 
 ---
 
-### `tracking_demo.py`
-**Ne yapar:** `track_video.py`'nin daha basit, demo amaçlı versiyonu. Belirli frame'leri (50, 150, 300, 450. frame) PNG olarak kaydeder ve takip istatistiklerini ekrana basar.
+### 3. Model Eğitimi
 
-**Farkı:** Tam video yerine sadece seçili frame'leri diske yazar; hızlı görsel doğrulama için kullanılır.
+```bash
+python -c "
+from ultralytics import YOLO
+model = YOLO('yolov8s.pt')
+model.train(
+    data='data.yaml',
+    epochs=50,
+    imgsz=640,
+    batch=16,
+    optimizer='SGD',
+    lr0=0.01,
+    mosaic=1.0,
+    close_mosaic=10,
+    project='runs',
+    name='yolov8s_visdrone_v1'
+)
+"
+```
 
-**Çıktılar:** `tracking_output/detected_frame_*.jpg`
+> Not: `batch=32` Tesla T4'te CUDA OOM hatasına yol açar, `batch=16` kullanın.  
+> Eğitim çıktısı: `runs/yolov8s_visdrone_v1/weights/best.pt`
+
+Adım adım notebook versiyonu: `notebooks/day5_training.ipynb`
 
 ---
 
-### `make_tracking_figure.py`
-**Ne yapar:** Rapor için tracking görsellerini hazırlar — birden fazla frame'i yan yana birleştirerek tek bir figür oluşturur (`tracking_frames.png`). ByteTrack takip istatistiklerini bar grafiği olarak çizer (`tracking_stats.png`).
+### 4. Model Değerlendirme (Test)
 
-**Çıktılar:** `tracking_frames.png`, `tracking_stats.png`
+```bash
+python -c "
+from ultralytics import YOLO
+model = YOLO('runs/yolov8s_visdrone_v1/weights/best.pt')
+metrics = model.val(data='data.yaml', imgsz=640, split='val')
+print('mAP@50:', metrics.box.map50)
+print('Precision:', metrics.box.p)
+print('Recall:', metrics.box.r)
+"
+```
+
+Detaylı değerlendirme notebook'u: `notebooks/day11_evaluation.ipynb`
 
 ---
 
+### 5. SAHI ile Çıkarım (Küçük Nesne Tespiti)
+
+```bash
+python -c "
+from sahi import AutoDetectionModel
+from sahi.predict import get_sliced_prediction
+
+model = AutoDetectionModel.from_pretrained(
+    model_type='ultralytics',
+    model_path='runs/yolov8s_visdrone_v1/weights/best.pt',
+    confidence_threshold=0.25,
+    device='cuda'
+)
+
+result = get_sliced_prediction(
+    'path/to/image.jpg',
+    model,
+    slice_height=640,
+    slice_width=640,
+    overlap_height_ratio=0.2,
+    overlap_width_ratio=0.2
+)
+result.export_visuals(export_dir='sahi_output/')
+"
+```
+
+SAHI konfigürasyon karşılaştırması: `notebooks/day12_sahi_comparison.ipynb`
+
+---
+
+### 6. Video Üzerinde Takip (YOLOv8s + ByteTrack)
+
+```bash
+python track_video.py \
+    --source 607004_Cities_City_3840x2160.mp4 \
+    --model runs/yolov8s_visdrone_v1/weights/best.pt \
+    --output tracking_output/result.mp4
+```
+
+Seçili frame'leri PNG olarak kaydetmek için:
+
+```bash
+python tracking_demo.py
+```
+
+ByteTrack hiperparametre optimizasyonu: `notebooks/day8_bytetrack_hyperparams.ipynb`
+
+---
+
+### 7. Hızlı Demo (Tüm Pipeline)
+
+Tüm aşamaları sırayla çalıştırmak için notebook'ları şu sırayla açın:
+
+| Sıra | Notebook | Aşama |
+|---|---|---|
+| 1 | `day1_setup.ipynb` | Kurulum ve veri hazırlığı |
+| 2 | `day5_training.ipynb` | YOLOv8s eğitimi |
+| 3 | `day11_evaluation.ipynb` | Model değerlendirme |
+| 4 | `day12_sahi_comparison.ipynb` | SAHI konfigürasyon seçimi |
+| 5 | `day7_bytetrack.ipynb` | ByteTrack entegrasyonu |
+| 6 | `day8_bytetrack_hyperparams.ipynb` | Hiperparametre optimizasyonu |
+| 7 | `day13_profiling.ipynb` | Performans profilleme |
+| 8 | `day14_error_analysis.ipynb` | Hata analizi |
+
+---
+
+### 8. Rapor Üretimi
+
+```bash
+# Tam IEEE makalesi
+python create_ieee_paper.py
+# Çıktı: IEEE_DIP_Paper_CakirBinay.docx
+
+# Sonuçlar bölümü (tüm tablolar + 14 figür gömülü)
+python create_results_word.py
+# Çıktı: IEEE_Results_Section.docx
+```
 ## Konfigürasyon Dosyaları
 
 | Dosya | İçerik |
@@ -169,9 +276,7 @@ Annotated Frame / Video          → Toplam: 24.5 ms = 40.8 FPS (SAHI kapalı)
 
 ## Gereksinimler
 
-```bash
-pip install ultralytics sahi supervision python-docx
-```
+requirements.txt dosyasında gerekli gereksinimler mevcuttur.
 
 GPU: NVIDIA Tesla T4 (veya eşdeğeri, min. 4 GB VRAM)  
 Python: 3.10+  
