@@ -1,0 +1,38 @@
+# HOG+SVM & YOLOv8n Baseline — Requirements
+# Emine Binay | COM 4504 Digital Image Processing | Ankara University 2026
+# Platform: Kaggle Notebooks (Tesla T4 GPU)
+# Install: pip install -r requirements.txt
+
+# ── Deep Learning — Object Detection ──────────────────────────────
+ultralytics==8.2.0          # YOLOv8 framework (training + inference)
+
+# ── SAHI — Slicing Aided Hyper Inference ──────────────────────────
+sahi==0.11.15               # Patch-based inference for small object detection
+
+# ── Classical Machine Learning ────────────────────────────────────
+scikit-learn>=1.3.0         # LinearSVC classifier
+scikit-image>=0.21.0        # HOG feature extraction (skimage.feature.hog)
+
+# ── Computer Vision ───────────────────────────────────────────────
+opencv-python==4.10.0.84    # Image read/write/resize (NumPy 2.x compatible)
+
+# ── Data Augmentation ─────────────────────────────────────────────
+albumentations>=1.3.1,<2.0  # Augmentation pipeline (HorizontalFlip, GaussNoise, etc.)
+
+# ── Deep Learning Framework ───────────────────────────────────────
+torch>=2.0.0                # PyTorch (GPU support via CUDA 12.2)
+
+# ── Tracking ──────────────────────────────────────────────────────
+supervision>=0.18.0         # ByteTrack wrapper + annotation tools
+lapx>=0.5.0                 # Linear assignment (required by ByteTrack)
+filterpy>=1.4.5             # Kalman filter (required by SORT/ByteTrack)
+
+# ── Data Science ──────────────────────────────────────────────────
+numpy>=1.24.0               # Array operations
+pandas>=2.0.0               # CSV processing (results.csv)
+matplotlib>=3.7.0           # Plotting and visualization
+
+# ── Utilities ─────────────────────────────────────────────────────
+kagglehub>=0.1.0            # Kaggle dataset access
+PyYAML>=6.0                 # data.yaml configuration
+tqdm>=4.65.0                # Progress bars
